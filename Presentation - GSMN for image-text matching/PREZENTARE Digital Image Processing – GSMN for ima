@@ -1,0 +1,114 @@
+PREZENTARE Digital Image Processing – GSMN for image-text matching
+
+
+Astazi vom vorbi despre Graph Structured Networks in contextul relationarii imaginilor cu limbajul natural.
+
+Ideea a trasa o echivalenta intre imagini si text  a prins interes deoarece reprezinta granita dintre visiune, dintre ceva ce poti vedea cu ochiul liber si limbajul natural iar provocarea pentru acest topic ar fi cum sa se stabileasca o echivalenta cat mai aproape de adevar intre cele doua.
+
+Dar de ce avem nevoie de acesta intercalare a imaginilor cu textul si ce provocari aduce in discutie?  
+
+1. Asa cum am spus anterior, resprezinta granita dintre 2 arii diferite: viziune si limbaj si de aceea are un mare potential in a aduce imbunatariti in aplicatiile multimodale.
+
+2. Imaginile nu vin la pachet si cu o intelegere globala semantica asa cum se intampla atunci cand un text insoteste o imagine, fapt ce o face sa prinda parca mai mult sens.
+
+3. Cercetarea si modelele create in aceasta directie detecteaza mai mult o corespondenta de tip trivial intre text si imagine, bazate fiind pe stastici ale obicectelor care apar si intr-o parte si in alta (deci de co-incidenta). Aceste modele nu reusesc sa invete si o corepondenta de 1:1, sau cum o numesc autorii, de tip fine-grained.
+
+
+Aici avem ilustrata diferenta dintre o corespondenta de tip coarse, deci triviala, si una de 1:1, de tip fine-grained. 
+In cazul primeia sunt detectati 2 caini, facandu-se matching-ul bazat pe statistici ale elementelor din imagine, in cazul de fata 2 caini. Sunt neglijate in schimb relatia dintre elemente sau caracteristici ale elementelor.  
+
+In cel de-al doilea caz, este detectat in imagine atributul elementului faptul ca primul caine este maro, si actiunea pe care o intreprinde. Asta se intampla si in cazul  cainelui gri. Asadar cele doua elemente din imagine sunt corelate mult mai bine cu detaliile textuale, iar acest lucru se realizeaza printr-o invatare a corespondentei dintre fraze cu ajutorul unei metode bazate pe grafuri.
+
+
+Asa cum am spus aceasta corespondenta de tip fine-grained, poate fi obtinuta folosing metode bazate pe grafuri. In lucrare este prezentat un model de tip Graph Structured Matching Network, pe scurt GSMN. 
+
+
+Ce poate face un astfel de model e sa modeleze explicit care este 3 elemente: obiectul, atributul si relatia cu alte obiecte prin intermediul unei fraze structurale.
+
+In ilustratie avem in partea stanga cum ar arata un graf textual, iar in a doua parte cum arata un grapf visual, intre ele stabilindu-se o echivalenta. Avem relatie, obiect, atribut.
+
+Aceste retele GSMN nu numai ca permit invatarea corespondentei dintre atribut-obiect-relatie ca element de sine statator. Pe langa asta, ele pot invata si o corespondenta de tip fine-grained a frazelor structurate. Acest lucru se realizeaza prin intermediul relationarii la nivel de noduri in graf. 
+
+Dat fiind un nod, care poate fi atribut, obiect sau relatie, intr-o prima faza acesta este conectat cu nodurile relevante din cealalt graf visual / textual. Nodurile asociate deduc aceasta corespondenta fine-grained a frazelor structurale, datorita vecinatatilor in structura grafului din care fac parte.
+
+
+In partea urmatoare a prezentarii vom vedea care este state of the art-ul pentru image-text matching si ce modele existente deja au reusit sa mai rezolve acest task.
+
+Asa cum am amintit anterior, cercetarea si modelele create in aceasta directie detecteaza mai mult o corespondenta de tip trivial intre text si imagine bazate fiind bazate fiind pe statictici de co-incidenta. Aceste lucrari se impart in 2 categorii in functie de corespondenta text-imagine pe care reusesc sa o surprinda:
+1. corespondenta globala: aceste modele invata corespondenta dintre intreaga imagine si propozitia data.
+2. corespondenta locala: care surprind o corelare intre regiuni din imagine si cuvant.
+
+In ceea ce priveste corespondenta de tip global, o linie principala care s-a urmarit in rezolvarea acestui task a fost de a reduce imaginea si textul la vectori de trasaturi, pentru ca apoi acest vectori sa fie proiectati intr-un spatiu comun, optimizat de o functie de pierdere prin care similaritatile vor fi filtrate. 
+
+Dintre cei care au facut cercetari in acest domeniu lucrarea aminteste 3 grupuri de autori. Primul a propus rezolvarea task-ului prin corelarea densa a imaginilor cu textul exploatand blocurile reziduale din cadrul retelei. 
+
+Al doilea si-a imaginat cum ar trebui sa arate o pereche de imagine-text corelate, si in directia asta a incercat sa imbunatateasca corespondenta dintre instanta data si targetul ei.
+
+Al treilei, a subliniat ideea ca atunci cand se face matching-ul dintre text imagine inclusiv corespondenta din cadrul aceleasi arii (visual, lingvinstic) trebuie conservata. Astfel el a pastrat o structura de timp graf intre imaginile care ar putea fi asemanatoare si similar pentru teste. o astfel de corespondenta intre text-imagine nu poate rezolva task-ul cu o acuratete mare deoarece obiectele principale au un rol dominant in reprezentarea globala (i.e. cainele, spre ex), in timp ce detalii secundare, obiecte secundare sunt de cele mai multe ori ignorate.
+
+In ceea ce priveste coresponta de tip local, am spus ca aceasta se bazeaza pe o corelare regiune - cuvant. Multe dintre lucrarile facute in aceasta directie se bazeaza pe detectarea elementelor proeminente, principale, fie ca e vorba de imagine sau text. 
+
+In acest sens exista un grup de autori care au exploatat acest model de detectare al obiectelor proeminente. Pentru antrenare acestia au folosit un dataset extern cu obiectele ce ar putea fi subiecti in instantele date. 
+
+Exista de asemenea si un approach mai nou, numit SCAN care detecteaza corespondenta dintre regiune si cuvant utilizand un mecanism de atentie, unde fiecare regiune corespunde mai multor cuvinte si invers.
+
+Limitarile muncii existente provind fin faptul ca de ele reusesc sa  detecteze o corespondenta triviala dar nu si una de tip fine-grained. 
+
+2 remarci sunt facute in acest sens: prima e ca e greu sa inveti corespondenta obiectului cu actiunea sau atributul ce i-ar fi inrudite, intrucat aceasta corespondenta este cumva pusa intr-un plan secundar de corespondenta dintre subiectii din imagine sau textul dat.
+O a doua ar fi ca obiectele detectate pot pointa catre categorii gresite, neavand si detaliile contextuale date de atribut si actiune.
+
+Asa cum am explicat si in slide-urile precedente, in prima imagine sunt detectati 2 caini, ca subiecti, dar primul caine din imagine nu se stie daca e primul sau al doilea caine din propozitie.
+
+Lucrarea vine cu o metoda care sa rezolve aceasta problema si sa detectecteze o corespondenta de tip fine-grained. Ei arata ca approach-ul lor este superior state-of-the-art-ului existent.
+
+Aceasta este arhitectura metodei propuse avand 4 etape. In prima etapa cea de feature extraction, se foloseste Faster-RCNN pentru imagini si Stanford CoreNLP pentru text, pentru a detecta subiectii din imagine/text, acele obiecte proeminente din imagine, si pentru a parsa dependintele semantice din text.
+
+In cea de a doua etapa, se construiesc 2 grafuri: un graf dens visual, si un graf rar textual. Nodurile vor fi reprezentate de obiecte, relatie sau actiune, si atribut. O muchie exista intre doua noduri daca cele 2 noduri sunt semantic dependente, adica daca obiectele interactioneaza unele cu altele. In aceasta idee, fiecare nod va fi conectat de asemenea si cu nodurile lui corespondente de tip relatie si atribut. 
+
+In faza a treia de node level matching, se va invata corespondenta dintre obiect-relatie-atribut in mod individual, urmand ca intr-o a patra etapa sa se produca matching-ul la nivel de structuri similare. Se propaga de asemenea aceasta corelare si la nivel de vecinatati si astfel se obtine acea corespondenta de tip fine-grained.
+
+
+Pentru construirea grafului textual se urmareste construirea unui graf rar neorientat, pentru fiecare propozitie. Se utilizeaza matricea de adiacenta a grafului, iar ponderile de pe muchii ce reprezinta dependinta semantica dintre noduri este stocata intr-o matrice W_e.
+
+Pentru detectarea dependintelor semantice se foloseste Stanford CoreNLP. Etapele pe care le realizeaza acest software ar fi in prima instanta sa faca detectarea partilor de vorbire, urmat de NER, urmat de detectarea co-referintelor, iar in final detectarea dependintelor semantice. In exemplul nostru, aveam 'a brown dog bite', brown and a vor fi detectate ca atribute, dog ca obiect, relatia va fi de bite. Toate sunt semantic dependente deoarece descriu acelasi obiect.
+
+Matricea W_e se obtine ca produs Hadamard dintre matricea de similaritate S a reprezentarilor de cuvinte u, si matricea de adiacenta urmata de aplicarea unei regularizari L2.
+
+Pentru construirea grafului visual, fiecare imagine este reprezentata ca un graf neorientat complet, unde fiecare nod reprezinta un element principal in imagine, detectat de Faster-RCNN.
+
+Autorii folosesc de asemenea coordonatele polare pentru a modela relatia spatiala in fiecare imagine, care subliniaza cat de departe sau aproape dar si orientarea regiunilor vecine.
+
+Date fiind 2 grafuri, unul textual si unul visual, scopul ar fi sa se coreleze cele doua grafuri, producandu-se o pereche G1, G2 ca similarilate globala la nivel text-imagine.
+
+Pentru a se realiza asta, sunt 2 etape ce trebuie urmate: 
+1. matching la nivel de noduri, fiecare nod spre ex din graful textual este corelat cu noduri din  graful visual si invers
+2. matching la nivel de structura prin care se va obtine acel fine grained correspondence. dintre imagine si text.
+
+Pentru corespondenta la nivel de noduri se calculeaza mai intai similaritatea dintre nodurile visuale si textuale peste care se aplica un softmax, ca in formulele de mai jos.
+
+
+Corespondenta la nivel de structura ia ca si input vectorii rezultati din faza precedenta, si extind acesti vectori catre vecinatatile nodurilor din vectorul considerat prin intermediul muchiilor. Un astfel de model, poate invata astfel o corespondenta fine grained, intrucat vecinatatile ajuta in obtinerea acesteia.
+
+Vectorul de corespondenta rezultat din faza de node-level matching este actualizat integrand vecinatatile nodurilor utilizand un GCN (i.e. o retea convolutionala bazata de grafuri). Layerul de GCN va folosi K kerneluri si va invata sa integreze vecinii dupa formula data.
+
+W_e matricea de la construirea grafului, W_k si biasul sunt parametrii ce trebuie sa ii invete GCN-ul, N_i este vecinatatea nodului i., sigma este functia de tanh (tangent hiperbolic).
+
+
+Dupa acest pas vectorii rezultati din GCN vor antrena un multilayer perceptron, care va avea ca input corespondenta dintre toate propozitiile invatate si va avea ca output scorul de asemanare. Similaritatile text-imagine si imagine-text sunt calculate dupa formulele date. Scorul total de asemanare text-imagine este o suma din cele doua. 
+
+Functia de pierdere pentru MLP este urmatoarea. Gama, este un ecart, o margine superioara pentru similaritate.
+
+Pentru a evalua modelul propus acesta a fost rulat avand ca seturi de antrenament instante din doua benchmarkuri folosite la scara larga pentru acest task. Flickr30K si MSCOCO. Acestea sunt 2 seturi de date formate din imagini, in care fiecare imagine are corelate 5 propozitii.
+
+Aici se poate vedea cum a performat algoritmul pe 2 imagini din setul Flickr30K, gasit top 5 propozitii cu care sa faca match. Corespondentele raportate gresit sunt marcate in rosu.
+
+Aici vedem rezultatele pe setul de date MSCOCO unde se vede ca valoare recall-ului este la fel, mai buna decat rezultatele modelelor deja incercate.
+
+Inainte de incheiere, voi trece in revista cateva remarci asupra prezentarii de astazi. Lucrarea a prezentat un nou model bazat de grafuri, de tip GSMN pentru a suprinde corespondenta text-imagine. Modelul reuseste sa suprinda corelari intre grafuri heterogene, la nivel de noduri dar si la nivel de structura. 
+
+Un astfel de model este de asemenea capabil sa invete o corespondenta de tip fine-grained, surprinzand de asemenea si relatia nodurilor cu atributele si relatiile ce le insotesc, aspect ce a fost neglijat in lucrarile precedente. Experimentele au demonstrat superioritatea modelului prezentat.
+
+As dori sa stiu daca sunt intrebari.
+
+
+Va multumesc pentru atentie si va urez o zi cat mai frumoasa!
